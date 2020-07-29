@@ -1,9 +1,9 @@
 {
   "name": "websocket-jsonrpc",
-  "version": "1.0.1",
+  "version": "1.2.1",
   "description": "基于WebSocket+JSONRPC+msgpack封装的实时通讯函数",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },

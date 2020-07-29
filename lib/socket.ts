@@ -8,7 +8,7 @@ import {
   GuidStorage,
   CallbackStorage,
   SocketType,
-} from './socket.d';
+} from './type';
 
 const defaultProps: PropsFuncType = {
   onopen: () => {},

@@ -1,5 +1,5 @@
 import Socket from './socket';
-import { SocketType } from './socket.d';
+import { SocketType } from './type';
 
 export default Socket;
 export { SocketType };
