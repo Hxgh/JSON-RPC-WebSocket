@@ -91,4 +91,5 @@ export interface CallbackStorage {
  */
 export interface SocketType {
   communicate: (send: Communicate) => Promise<void>;
+  close: (code?: number, reason?: string) => void;
 }

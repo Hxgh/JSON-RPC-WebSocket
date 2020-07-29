@@ -163,4 +163,13 @@ export default class Socket {
     const buffer: Buffer = encode(data);
     this.ws.send(buffer);
   };
+
+  /**
+   * 关闭链接
+   *
+   * @memberof Socket
+   */
+  public close: SocketType['close'] = (code = 1005, reason = '') => {
+    this.ws.close(code, reason);
+  };
 }
