@@ -1,4 +1,4 @@
-# [WebSocket-JSONRPC](https://github.com/Hxgh/websocket-jsonrpc)
+# [jsonrpc2websocket](https://github.com/Hxgh/jsonrpc2websocket)
 
 基于WebSocket+JSONRPC+msgpack+TypeScript封装的实时通讯函数
 - [msgpack-lite](https://github.com/kawanet/msgpack-lite/)
@@ -7,13 +7,13 @@
 ### 安装
 
 ```sh
-$ npm install websocket-jsonrpc
+$ npm install jsonrpc2websocket
 # or
-yarn add websocket-jsonrpc
+yarn add jsonrpc2websocket
 ```
 ### 使用
 ```
-import Socket, { SocketType } from 'websocket-jsonrpc';
+import Socket, { SocketType } from 'jsonrpc2websocket';
 
 const socket: SocketType = new Socket({ url: 'ws://url' });
 

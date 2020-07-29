@@ -1,5 +1,5 @@
 {
-  "name": "websocket-jsonrpc",
+  "name": "jsonrpc2websocket",
   "version": "1.0.0",
   "description": "基于WebSocket+JSONRPC+msgpack封装的实时通讯函数",
   "main": "dist/index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hxgh/websocket-jsonrpc.git"
+    "url": "git+https://github.com/Hxgh/jsonrpc2websocket.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Hxgh/websocket-jsonrpc/issues"
+    "url": "https://github.com/Hxgh/jsonrpc2websocket/issues"
   },
-  "homepage": "https://github.com/Hxgh/websocket-jsonrpc#readme",
+  "homepage": "https://github.com/Hxgh/jsonrpc2websocket#readme",
   "devDependencies": {
     "@types/msgpack-lite": "^0.1.7",
     "typescript": "^3.9.7"
