@@ -17,11 +17,21 @@ import Socket, { SocketType } from 'jsonrpc2websocket';
 
 const socket: SocketType = new Socket({ url: 'ws://url' });
 
-socket.communicate({
-    method: 'sayhellosync',
+// 普通模式
+socket.send({
+    method: 'msg',
     callback: e => {
       console.log(e);
     },
 });
+
+// 流模式
+const stream = socket.stream({
+    method: 'start',
+    callback: e => {
+      console.log(e);
+    },
+});
+stream.close();
 
 ```
