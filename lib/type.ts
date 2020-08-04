@@ -90,6 +90,7 @@ export interface CallbackStorage {
  * @interface SocketType
  */
 export interface SocketType {
-  communicate: (send: Communicate) => Promise<void>;
+  send: (send: Communicate) => void;
+  stream: (send: Communicate) => Object;
   close: (code?: number, reason?: string) => void;
 }
