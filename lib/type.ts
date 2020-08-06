@@ -83,6 +83,17 @@ export interface CallbackStorage {
   [propName: string]: Communicate['callback'];
 }
 
+
+/**
+ * stream的类型
+ *
+ * @export
+ * @interface SocketStrem
+ */
+export interface SocketStrem {
+  close: (code?: number, reason?: string) => void;
+}
+
 /**
  * 实时通讯函暴露的API类型:public
  *
@@ -91,6 +102,11 @@ export interface CallbackStorage {
  */
 export interface SocketType {
   send: (send: Communicate) => void;
-  stream: (send: Communicate) => Object;
   close: (code?: number, reason?: string) => void;
+  stream: (
+    send: Communicate
+  ) => {
+    id: string;
+    close: SocketStrem['close'];
+  } | void;
 }

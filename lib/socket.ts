@@ -126,7 +126,9 @@ export default class Socket {
    * @memberof Socket
    */
   private onmessage(e: MessageEvent) {
-    const response: ResType = decode(Array.prototype.slice.call(new Uint8Array(e.data)));
+    const response: ResType = decode(
+      Array.prototype.slice.call(new Uint8Array(e.data))
+    );
     if (!response) return;
     const { result, error, id, message, data } = response;
     const res = result || error || { message, data };
@@ -134,7 +136,7 @@ export default class Socket {
       this.deleteGUID(id);
       this.finishResponse(res, id);
     }
-    (<PropsFuncType['onmessage']>this.props.onmessage)(res);
+    (<PropsFuncType['onmessage']>this.props.onmessage)(response);
   }
 
   /**
@@ -164,7 +166,7 @@ export default class Socket {
     this.ws.send(encode({ jsonrpc: this.props.jsonrpc, params, ...guid }));
   };
 
-  public stream: SocketType['stream'] = async (data: Communicate) => {
+  public stream: SocketType['stream'] = (data: Communicate) => {
     const { method, callback, params } = data;
     // 未传method || 未建立链接不允许通信 || 未传回调
     if (method === undefined || !callback || this.ws.readyState !== 1) return;
@@ -174,11 +176,13 @@ export default class Socket {
       this.saveResponse(callback, id);
     }
     // 构造完整send数据
-    this.ws.send(encode({ jsonrpc: this.props.jsonrpc, params, ...{ id: this.streamID } }));
+    this.ws.send(
+      encode({ jsonrpc: this.props.jsonrpc, params, ...{ id: this.streamID } })
+    );
     // 处理关闭逻辑：清除streamID 并关闭链接
     return {
       id: this.streamID,
-      close: (code: number | undefined, reason: string | undefined) => {
+      close: (code?: number, reason?: string) => {
         this.streamID = '';
         this.close(code, reason);
       },
@@ -190,5 +194,6 @@ export default class Socket {
    *
    * @memberof Socket
    */
-  public close: SocketType['close'] = (code, reason) => this.ws.close(code, reason);
+  public close: SocketType['close'] = (code, reason) =>
+    this.ws.close(code, reason);
 }

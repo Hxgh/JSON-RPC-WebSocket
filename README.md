@@ -34,4 +34,10 @@ const stream = socket.stream({
 });
 stream.close();
 
+// 接收所有消息
+const socket: SocketType = new Socket({
+  url: 'ws://url',
+  onmessage: (res: Object) => console.log(res),
+});
+
 ```
