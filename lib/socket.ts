@@ -8,6 +8,7 @@ import {
   GuidStorage,
   CallbackStorage,
   SocketType,
+  WithUrl,
 } from './type';
 
 const defaultProps: PropsFuncType = {
@@ -47,7 +48,7 @@ export default class Socket {
    * @memberof Socket
    */
   private setupWS(): WebSocket {
-    const ws: WebSocket = new WebSocket(this.props.url);
+    const ws: WebSocket = new WebSocket(this.props.url, this.props.protocols);
     ws.binaryType = 'arraybuffer';
     ws.onopen = (e) => (<PropsFuncType['onopen']>this.props.onopen)(e);
     ws.onmessage = (e) => this.onmessage(e);
@@ -152,7 +153,7 @@ export default class Socket {
     if (this.ws.readyState !== 1) return;
     // 未传method return
     if (method === undefined) return;
-    // 如果是通知责无需存guid
+    // 如果是通知则无需存guid
     let guid: { id?: Communicate['id'] } = {};
     const id = this.saveGUID(createGUID());
     if (!isInform) {
@@ -163,12 +164,20 @@ export default class Socket {
       }
     }
     // 构造完整send数据
-    this.ws.send(encode({ jsonrpc: this.props.jsonrpc, params, ...guid }));
+    this.ws.send(
+      encode({ jsonrpc: this.props.jsonrpc, params, method, ...guid })
+    );
   };
 
+  /**
+   * 启用流模式
+   *
+   * @type {SocketType['stream']}
+   * @memberof Socket
+   */
   public stream: SocketType['stream'] = (data: Communicate) => {
     const { method, callback, params } = data;
-    // 未传method || 未建立链接不允许通信 || 未传回调
+    // 未传method || 未传回调 || 未建立链接 => 不允许通信
     if (method === undefined || !callback || this.ws.readyState !== 1) return;
     // 存储并维护id callback
     const id = this.saveGUID(createGUID());
@@ -177,7 +186,12 @@ export default class Socket {
     }
     // 构造完整send数据
     this.ws.send(
-      encode({ jsonrpc: this.props.jsonrpc, params, ...{ id: this.streamID } })
+      encode({
+        jsonrpc: this.props.jsonrpc,
+        params,
+        method,
+        ...{ id: this.streamID },
+      })
     );
     // 处理关闭逻辑：清除streamID 并关闭链接
     return {
@@ -196,4 +210,21 @@ export default class Socket {
    */
   public close: SocketType['close'] = (code, reason) =>
     this.ws.close(code, reason);
+
+  /**
+   * 更换url
+   *
+   * @type {WithUrl}
+   * @memberof Socket
+   */
+  public withUrl: WithUrl = (url: string) => {
+    // 关闭链接
+    this.close();
+    this.guidStorage = [];
+    this.callbackStorage = {};
+    this.streamID = '';
+    // 载入新连接
+    this.props.url = url;
+    this.ws = this.setupWS();
+  };
 }

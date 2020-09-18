@@ -9,5 +9,5 @@ export const createFour = () => (((1 + Math.random()) * 0x10000) | 0).toString(1
  * @returns {string}
  */
 export const createGUID = () => {
-  return `${createFour()}${createFour()}'-'${createFour()}'-'${createFour()}'-'${createFour()}'-'${createFour()}${createFour()}${createFour()}`;
+  return `${createFour()}${createFour()}-${createFour()}-${createFour()}-${createFour()}-${createFour()}${createFour()}${createFour()}`;
 };

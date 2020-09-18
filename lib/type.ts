@@ -53,6 +53,7 @@ export interface PropsFuncType {
  */
 export interface PropsType {
   url: string;
+  protocols?: string | string[] | undefined;
   onopen?: PropsFuncType['onopen'];
   onmessage?: PropsFuncType['onmessage'];
   onclose?: PropsFuncType['onclose'];
@@ -82,7 +83,15 @@ export interface GuidStorage {
 export interface CallbackStorage {
   [propName: string]: Communicate['callback'];
 }
-
+/**
+ * 更换url函数的数据类型
+ *
+ * @export
+ * @interface WithUrl
+ */
+export interface WithUrl {
+  (url: string): void;
+}
 
 /**
  * stream的类型
