@@ -1,4 +1,4 @@
-# [jsonrpc2websocket](https://github.com/Hxgh/jsonrpc2websocket)
+# [JSON-RPC-WebSocket](https://github.com/Hxgh/jsonrpc2websocket)
 
 基于WebSocket+JSONRPC+msgpack+TypeScript封装的实时通讯函数
 - [msgpack-lite](https://github.com/kawanet/msgpack-lite/)
@@ -7,13 +7,13 @@
 ### 安装
 
 ```sh
-$ npm install jsonrpc2websocket
+$ npm install json-rpc-websocket
 # or
-yarn add jsonrpc2websocket
+pnpm add json-rpc-websocket
 ```
 ### 使用
 ```
-import Socket, { SocketType } from 'jsonrpc2websocket';
+import Socket, { SocketType } from 'json-rpc-websocket';
 
 const socket: SocketType = new Socket({ url: 'ws://url' });
 
@@ -31,11 +31,14 @@ const stream = socket.stream({
     callback: e => {
       console.log(e);
     },
+    onerror: e => {
+      console.log('处理超时 || 处理send无法启动');
+    },
 });
 stream.close();
 
 // 接收所有消息
-const socket: SocketType = new Socket({
+const socket = new Socket({
   url: 'ws://url',
   onmessage: (res: Object) => console.log(res),
 });

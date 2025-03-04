@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /**
  * 发送数据时回调函数参数类型
  *
@@ -28,8 +29,10 @@ export interface Communicate {
   method: string;
   params?: Object;
   id?: string;
+  timeout?: number;
   isInform?: boolean | undefined;
   callback?: (res: ResType['res']) => void;
+  onerror?: (res: { code?: string | number; message?: string }) => void;
 }
 
 /**
@@ -59,19 +62,6 @@ export interface PropsType {
   onclose?: PropsFuncType['onclose'];
   onerror?: PropsFuncType['onerror'];
   jsonrpc?: string;
-}
-
-/**
- * guid存储的类型
- *
- * @export
- * @interface GuidStorage
- */
-export interface GuidStorage {
-  splice(index: any, arg1: number): Array<any>;
-  findIndex(arg0: (v: any) => boolean): number;
-  push(guid: string): number;
-  [index: number]: ResType['id'];
 }
 
 /**

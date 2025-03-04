@@ -1,4 +1,13 @@
-node_modules/
+# Local
+.DS_Store
+*.local
+*.log*
+
+# Dist
+node_modules
 dist/
-yarn-error.log
-package-lock.json
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea

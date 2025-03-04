@@ -1,11 +1,10 @@
-import { encode, decode } from 'msgpack-lite';
-import { createGUID } from './tools';
+import { encode, decode } from './msgpack';
+import { createGUID1 } from './tools';
 import {
   PropsType,
   PropsFuncType,
   Communicate,
   ResType,
-  GuidStorage,
   CallbackStorage,
   SocketType,
   WithUrl,
@@ -27,11 +26,11 @@ const defaultProps: PropsFuncType = {
 export default class Socket {
   private props: PropsType;
 
-  private guidStorage: GuidStorage = [];
+  private guidStorage: Array<ResType['id']> = [];
 
   private callbackStorage: CallbackStorage = {};
 
-  private ws: WebSocket;
+  public ws: WebSocket;
 
   private streamID: string = '';
 
@@ -75,17 +74,43 @@ export default class Socket {
    *
    * @private
    * @param {string} guid
-   * @returns {string}
+   * @returns {boolean}
    * @memberof Socket
    */
 
-  private deleteGUID(guid: string): string {
+  private deleteGUID(guid: string): boolean {
     const arr = this.guidStorage;
-    const index = arr.findIndex((v) => v === guid);
+    const index = arr.indexOf(guid);
     if (index !== -1) {
       arr.splice(index, 1);
+      return true;
     }
-    return guid;
+    return false;
+  }
+
+  /**
+   * send时触发超时函数
+   *
+   * @private
+   * @param {string} guid
+   * @memberof Socket
+   */
+  private touchTimeout(
+    id: string,
+    time: Communicate['timeout'] = 15 * 1000,
+    onerror: Communicate['onerror'] = () => {}
+  ): void {
+    setTimeout(() => {
+      if (this.guidStorage.includes(id)) {
+        // 通知send超时
+        onerror({
+          code: 408,
+          message: '发送数据链接超时',
+        });
+        // 清除guid
+        this.deleteGUID(id);
+      }
+    }, time);
   }
 
   /**
@@ -108,7 +133,7 @@ export default class Socket {
    * @returns
    * @memberof Socket
    */
-  private finishResponse(res: ResType['res'], id: string) {
+  private finishResponse(res: ResType, id: string) {
     const callback = this.callbackStorage[id];
     if (this.callbackStorage[id] !== undefined && callback) {
       // 执行方法
@@ -131,11 +156,9 @@ export default class Socket {
       Array.prototype.slice.call(new Uint8Array(e.data))
     );
     if (!response) return;
-    const { result, error, id, message, data } = response;
-    const res = result || error || { message, data };
-    if (id) {
-      this.deleteGUID(id);
-      this.finishResponse(res, id);
+    const { id } = response;
+    if (id && this.deleteGUID(id)) {
+      this.finishResponse(response, id);
     }
     (<PropsFuncType['onmessage']>this.props.onmessage)(response);
   }
@@ -148,14 +171,30 @@ export default class Socket {
    * @memberof Socket
    */
   public send: SocketType['send'] = (data: Communicate) => {
-    const { method, isInform, callback, params } = data;
+    const {
+      id: paramId,
+      method,
+      isInform,
+      callback,
+      onerror,
+      params,
+      timeout,
+    } = data;
     // 未建立链接不允许通信
-    if (this.ws.readyState !== 1) return;
+    if (this.ws.readyState !== 1) {
+      if (onerror) {
+        onerror({
+          code: 3,
+          message: '连接已关闭或者没有链接成功',
+        });
+      }
+      return;
+    }
     // 未传method return
     if (method === undefined) return;
     // 如果是通知则无需存guid
     let guid: { id?: Communicate['id'] } = {};
-    const id = this.saveGUID(createGUID());
+    const id = this.saveGUID(paramId || createGUID1());
     if (!isInform) {
       guid = { id };
       // 如果需要回调处理
@@ -163,6 +202,9 @@ export default class Socket {
         this.saveResponse(callback, id);
       }
     }
+    // 设置超时
+    this.touchTimeout(id, timeout, onerror);
+
     // 构造完整send数据
     this.ws.send(
       encode({ jsonrpc: this.props.jsonrpc, params, method, ...guid })
@@ -176,11 +218,11 @@ export default class Socket {
    * @memberof Socket
    */
   public stream: SocketType['stream'] = (data: Communicate) => {
-    const { method, callback, params } = data;
+    const { id: paramId, method, callback, params } = data;
     // 未传method || 未传回调 || 未建立链接 => 不允许通信
     if (method === undefined || !callback || this.ws.readyState !== 1) return;
     // 存储并维护id callback
-    const id = this.saveGUID(createGUID());
+    const id = this.saveGUID(paramId || createGUID1());
     if (callback) {
       this.saveResponse(callback, id);
     }
