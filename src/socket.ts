@@ -1,6 +1,6 @@
 import { encode, decode } from './msgpack';
-import { createGUID1 } from './tools';
-import {
+import { generateUUID } from './tools';
+import type {
   PropsType,
   PropsFuncType,
   Communicate,
@@ -32,7 +32,7 @@ export default class Socket {
 
   public ws: WebSocket;
 
-  private streamID: string = '';
+  private streamID = '';
 
   constructor(props: PropsType) {
     this.props = { jsonrpc: '2.0', ...defaultProps, ...props };
@@ -194,7 +194,7 @@ export default class Socket {
     if (method === undefined) return;
     // 如果是通知则无需存guid
     let guid: { id?: Communicate['id'] } = {};
-    const id = this.saveGUID(paramId || createGUID1());
+    const id = this.saveGUID(paramId || generateUUID());
     if (!isInform) {
       guid = { id };
       // 如果需要回调处理
@@ -222,7 +222,7 @@ export default class Socket {
     // 未传method || 未传回调 || 未建立链接 => 不允许通信
     if (method === undefined || !callback || this.ws.readyState !== 1) return;
     // 存储并维护id callback
-    const id = this.saveGUID(paramId || createGUID1());
+    const id = this.saveGUID(paramId || generateUUID());
     if (callback) {
       this.saveResponse(callback, id);
     }

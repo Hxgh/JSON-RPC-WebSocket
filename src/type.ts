@@ -27,7 +27,7 @@ export interface ResType {
 export interface Communicate {
   jsonrpc?: string;
   method: string;
-  params?: Object;
+  params?: Record<string, unknown>;
   id?: string;
   timeout?: number;
   isInform?: boolean | undefined;
@@ -43,7 +43,7 @@ export interface Communicate {
  */
 export interface PropsFuncType {
   onopen: (e?: Event) => void;
-  onmessage: (e?: Object) => void;
+  onmessage: (e?: unknown) => void;
   onclose: (e?: CloseEvent) => void;
   onerror: (e?: Event) => void;
 }
@@ -79,9 +79,7 @@ export interface CallbackStorage {
  * @export
  * @interface WithUrl
  */
-export interface WithUrl {
-  (url: string): void;
-}
+export type WithUrl = (url: string) => void
 
 /**
  * stream的类型
@@ -102,10 +100,8 @@ export interface SocketStrem {
 export interface SocketType {
   send: (send: Communicate) => void;
   close: (code?: number, reason?: string) => void;
-  stream: (
-    send: Communicate
-  ) => {
+  stream: (send: Communicate) => {
     id: string;
     close: SocketStrem['close'];
-  } | void;
+  } | undefined;
 }
