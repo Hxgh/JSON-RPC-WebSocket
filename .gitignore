@@ -1,14 +1,45 @@
-# Local
-.DS_Store
-*.local
-*.log*
+# Dependencies
+node_modules/
 
-# Dist
-node_modules
+# Build output
 dist/
-pnpm-lock.yaml
+!dist/package.json
+
+# Test coverage
+coverage/
 
 # IDE
-.vscode/*
-!.vscode/extensions.json
-.idea
+.idea/
+.vscode/
+*.iml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# locks
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+
+# System
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Cache
+.cache/
+.npm/
+.pnpm-store/

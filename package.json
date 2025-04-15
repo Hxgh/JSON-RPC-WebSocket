@@ -17,7 +17,8 @@
     "build": "rslib build",
     "check": "biome check --write",
     "dev": "rslib build --watch",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "build:npm": "rslib build && nrm use npm && cd dist && npm publish --access public && cd ../"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

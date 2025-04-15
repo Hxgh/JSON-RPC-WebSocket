@@ -1,0 +1,21 @@
+{
+  "name": "json-rpc-websocket",
+  "description": "A lightweight JSON-RPC 2.0 client implementation over WebSocket, supporting request-response, notifications, and batch processing",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "author": "Hxgh",
+  "license": "MIT",
+  "version": "0.1.0",
+  "private": false,
+  "keywords": [
+    "json-rpc",
+    "websocket",
+    "rpc",
+    "client",
+    "remote-procedure-call",
+    "typescript",
+    "real-time",
+    "communication",
+    "async"
+  ]
+}
