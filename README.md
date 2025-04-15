@@ -1,4 +1,4 @@
-# [JSON-RPC-WebSocket](https://github.com/Hxgh/jsonrpc2websocket)
+# [json-rpc-websocket](https://github.com/Hxgh/json-rpc-websocket)
 
 基于WebSocket+JSONRPC+msgpack+TypeScript封装的实时通讯函数
 - [msgpack-lite](https://github.com/kawanet/msgpack-lite/)
@@ -7,8 +7,6 @@
 ### 安装
 
 ```sh
-$ npm install json-rpc-websocket
-# or
 pnpm add json-rpc-websocket
 ```
 ### 使用
