@@ -6,7 +6,7 @@ export const generateHexSegment = (): string =>
   (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 
 /**
- * 生成全局唯一标识符(GUID/UUID)
+ * 生成全局唯一标识符(UUID)
  * 格式: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
  * @returns {string} 符合RFC4122标准的UUID字符串
  */
