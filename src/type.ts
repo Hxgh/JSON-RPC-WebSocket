@@ -114,7 +114,7 @@ export interface SocketType {
 export interface JsonRpcRequest {
   jsonrpc: '2.0';
   method: string;
-  params?: any;
+  params?: unknown;
   id?: string | number | null;
 }
 
@@ -123,7 +123,7 @@ export interface JsonRpcRequest {
  */
 export interface JsonRpcResponse {
   jsonrpc: '2.0';
-  result?: any;
+  result?: unknown;
   error?: JsonRpcError;
   id: string | number | null;
 }
@@ -134,7 +134,7 @@ export interface JsonRpcResponse {
 export interface JsonRpcError {
   code: number;
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 /**
